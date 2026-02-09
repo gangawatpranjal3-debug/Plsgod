@@ -24,6 +24,24 @@ Your login is currently failing because the Supabase database needs to be initia
 
 Just log in or create an account to start tracking your study sessions!
 
+### Use Your Own Supabase Project (Optional)
+
+If you want to connect this app to your own Supabase project:
+
+1. Copy `.env.example` to `.env`
+2. Fill in `VITE_SUPABASE_URL` and either `VITE_SUPABASE_ANON_KEY` or `VITE_SUPABASE_PUBLISHABLE_KEY` from your Supabase project settings
+3. Keep `VITE_SUPABASE_FUNCTION_NAME=make-server` unless you renamed the function
+4. Restart the dev server
+
+### Security Tip (Important)
+
+You can safely use the **Supabase anon key** in frontend apps.
+
+- ✅ OK to use in this app: `VITE_SUPABASE_ANON_KEY` or `VITE_SUPABASE_PUBLISHABLE_KEY`
+- ❌ Never put in frontend code: **service_role key**
+
+Keep your real values in `.env` (which is now gitignored) so they are not accidentally committed.
+
 ## ✨ Features
 
 - **Multi-User Support**: Real-time leaderboard showing all registered users
