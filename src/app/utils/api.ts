@@ -2,7 +2,11 @@
 import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 import { localStorageApi } from '../lib/storage-fallback';
 
-const API_BASE_URL = `https://${projectId}.supabase.co/functions/v1/make-server`;
+const env = import.meta.env;
+const supabaseUrl = env.VITE_SUPABASE_URL || `https://${projectId}.supabase.co`;
+const apiKey = env.VITE_SUPABASE_ANON_KEY || env.VITE_SUPABASE_PUBLISHABLE_KEY || publicAnonKey;
+const functionName = env.VITE_SUPABASE_FUNCTION_NAME || 'make-server';
+const API_BASE_URL = `${supabaseUrl}/functions/v1/${functionName}`;
 
 // Connection mode tracking
 let useOnlineMode = false; // Start in offline mode by default
@@ -18,7 +22,8 @@ export async function checkConnection(): Promise<boolean> {
   try {
     const response = await fetch(`${API_BASE_URL}/health`, {
       headers: {
-        'Authorization': `Bearer ${publicAnonKey}`,
+        'Authorization': `Bearer ${apiKey}`,
+        'apikey': apiKey,
       },
       signal: AbortSignal.timeout(3000), // 3 second timeout
     });
@@ -101,7 +106,8 @@ async function apiRequest<T>(
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
+        'Authorization': `Bearer ${apiKey}`,
+        'apikey': apiKey,
         ...options.headers,
       },
     });
